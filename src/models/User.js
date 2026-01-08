@@ -31,14 +31,16 @@ const userSchema = new mongoose.Schema({
     coursesTeaching: {
         type: [String],
         default: [],
-        required: ()=>{this.role === "lecturer"},
+        required: function(){return this.role === "lecturer"},
     },
     coursesEnrolled:{
         type: [String],
         default: [],
-        required: ()=>{this.role === "student"}
+        required: function(){return this.role === "student"}
     }
-});
+},
+    { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 
