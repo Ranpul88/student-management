@@ -19,12 +19,30 @@ export async function POST(req){
         }
 
         let role
+        let userID
 
         if(data.email.endsWith('@lecturer.edu')){
             role = "lecturer"
+            userID = "LEC0001"
+            const lastLecturer = await User.findOne({ role: "lecturer" }, { sort: { createdAt: -1 } })
+            if(lastLecturer!=null){
+                const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("LEC", "")))
+                const newUserID = "LEC" + (lastUserIDNumber + 1).toString().padStart(4, "0")
+                userID = newUserID
+            }
+
         }else{
-            role = "student"   
+            role = "student"
+            userID = "STU0001"
+            const lastLecturer = await User.findOne({ role: "student" }, { sort: { createdAt: -1 } })
+            if(lastLecturer!=null){
+                const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("LEC", "")))
+                const newUserID = "LEC" + (lastUserIDNumber + 1).toString().padStart(4, "0")
+                userID = newUserID
+            }
         }
+
+         
 
         const hashedPassword = await bcrypt.hash(data.password, 10)
 
@@ -32,6 +50,7 @@ export async function POST(req){
             firstName: data.name,
             lastName: data.name,
             email: data.email,
+            userID: userID,
             password: hashedPassword,
             role: role
         })
