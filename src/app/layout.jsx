@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import Header from "./components/header";
 import "./globals.css";
 
@@ -9,6 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <Toaster
+        position="top-right"
+      />
+
+
       <body className="w-full h-screen">
         <Header />
         {children}
