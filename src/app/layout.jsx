@@ -10,12 +10,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Toaster
-        position="top-right"
-      />
 
 
       <body className="w-full h-screen">
+        <Toaster
+          position="top-right"
+        />
         <Header />
         {children}
       </body>

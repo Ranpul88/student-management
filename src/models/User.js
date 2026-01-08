@@ -30,18 +30,16 @@ const userSchema = new mongoose.Schema({
     },
     coursesTeaching: {
         type: [String],
-        default: [],
-        required: function(){return this.role === "lecturer"},
+        default: []
     },
     coursesEnrolled:{
         type: [String],
-        default: [],
-        required: function(){return this.role === "student"}
+        default: []
     }
 },
     { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User

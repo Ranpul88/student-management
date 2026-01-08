@@ -36,8 +36,8 @@ export async function POST(req){
             userID = "STU0001"
             const lastLecturer = await User.findOne({ role: "student" }, { sort: { createdAt: -1 } })
             if(lastLecturer!=null){
-                const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("LEC", "")))
-                const newUserID = "LEC" + (lastUserIDNumber + 1).toString().padStart(4, "0")
+                const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("STU", "")))
+                const newUserID = "STU" + (lastUserIDNumber + 1).toString().padStart(4, "0")
                 userID = newUserID
             }
         }
@@ -47,8 +47,8 @@ export async function POST(req){
         const hashedPassword = await bcrypt.hash(data.password, 10)
 
         const user = new User({
-            firstName: data.name,
-            lastName: data.name,
+            firstName: data.firstName,
+            lastName: data.lastName,
             email: data.email,
             userID: userID,
             password: hashedPassword,
