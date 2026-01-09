@@ -1,11 +1,11 @@
 'use client'
 
+import Loader from '@/app/components/loader';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaGoogle } from "react-icons/fa";
-import Loader from '../components/loader';
 
 export default function Login() {
   const[email, setEmail] = useState('')
@@ -16,16 +16,16 @@ export default function Login() {
   async function login(){
     setIsLoading(true)
     try {
-      const res = await fetch(process.env.BACKEND_URL + '/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
+        await fetch(process.env.BACKEND_URL + '/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
         })
-      })
 
       // const data = await res.json()
 
@@ -55,7 +55,7 @@ export default function Login() {
         <p className='w-[90%] text-right text-[13px] mb-8 mr-1'>Forgot password? <Link href='/forgot-password' className='italic lg:text-secondary text-accent hover:text-accent'>Reset here</Link></p>
         <button onClick={login} disabled={isLoading} className='w-[90%] h-9 border rounded-lg mb-2 bg-accent text-white font-semibold cursor-pointer hover:bg-accent/90'>Login</button>
         <button className='w-[90%] h-9 flex items-center justify-center gap-1 border rounded-lg bg-accent text-white font-semibold cursor-pointer hover:bg-accent/90'>Login with <FaGoogle /></button>
-        <p className='w-[90%] text-right text-[13px] mb-8'>Dont have an account? <Link href='/forgot-password' className='italic text-accent lg:text-secondary hover:text-accent mr-1'>Register here</Link></p>
+        <p className='w-[90%] text-right text-[13px]'>Don't have an account? <Link href='/auth/register' className='italic text-accent lg:text-secondary hover:text-accent mr-1'>Register here</Link></p>
       </div>}
     </div>
   )

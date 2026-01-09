@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Header() {
   return (
     <div className="w-full h-14 text-accent shadow-xl flex flex-row">
-        <img src="./logo.png" alt="logo" className="h-14 object-cover" />
+        <img src="/logo.png" alt="logo" className="h-14 object-cover" />
         <div className="w-full flex items-center justify-center gap-6">
             <Link href='/' className="hover:scale-105">Home</Link>
             <Link href='/courses' className="hover:scale-105">Courses</Link>
