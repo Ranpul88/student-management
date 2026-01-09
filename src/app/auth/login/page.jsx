@@ -16,7 +16,7 @@ export default function Login() {
   async function login(){
     setIsLoading(true)
     try {
-        await fetch(process.env.BACKEND_URL + '/login', {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -26,6 +26,12 @@ export default function Login() {
             password: password
           })
         })
+
+        if(!res.ok){
+          toast.error("Login failed! Please check your credentials and try again.")
+          setIsLoading(false)
+          return
+        }
 
       // const data = await res.json()
 

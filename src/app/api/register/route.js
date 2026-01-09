@@ -24,7 +24,7 @@ export async function POST(req){
         if(data.email.endsWith('@lecturer.edu')){
             role = "lecturer"
             userID = "LEC0001"
-            const lastLecturer = await User.findOne({ role: "lecturer" }, { sort: { createdAt: -1 } })
+            const lastLecturer = await User.findOne({ role: "lecturer" }).sort({ createdAt: -1 })
             if(lastLecturer!=null){
                 const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("LEC", "")))
                 const newUserID = "LEC" + (lastUserIDNumber + 1).toString().padStart(4, "0")
@@ -34,17 +34,18 @@ export async function POST(req){
         }else{
             role = "student"
             userID = "STU0001"
-            const lastLecturer = await User.findOne({ role: "student" }, { sort: { createdAt: -1 } })
-            if(lastLecturer!=null){
-                const lastUserIDNumber = (parseInt(lastLecturer.userID.replace("STU", "")))
+            const lastStudent = await User.findOne({ role: "student" }).sort({ createdAt: -1 })
+            if(lastStudent!=null){
+                const lastUserIDNumber = (parseInt(lastStudent.userID.replace("STU", "")))
                 const newUserID = "STU" + (lastUserIDNumber + 1).toString().padStart(4, "0")
                 userID = newUserID
             }
         }
 
-         
-
         const hashedPassword = await bcrypt.hash(data.password, 10)
+        
+        console.log(role)
+        console.log(userID)
 
         const user = new User({
             firstName: data.firstName,
@@ -54,7 +55,7 @@ export async function POST(req){
             password: hashedPassword,
             role: role
         })
-
+        console.log(user)
         await user.save()
         return NextResponse.json(
             { message: "User created successfully" },

@@ -16,14 +16,20 @@ export default function Register() {
   const router = useRouter()
 
   async function register(){
-    if(firstName.trim() === '' || lastName.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === ''){return}
+    if(firstName.trim() === '' || lastName.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === ''){
+        toast.error("Please fill in all required fields.")
+        return
+    }
 
-    if(password !== confirmPassword){return}
+    if(password !== confirmPassword){
+        toast.error("Passwords do not match.")
+        return
+    }
 
     setIsLoading(true)
 
     try {
-        await fetch(process.env.BACKEND_URL + '/register', {
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/register', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
@@ -36,9 +42,15 @@ export default function Register() {
             })
         })
 
-      router.push('/auth/login')
-      setIsLoading(false)
-      toast.success("register successful!.")
+        if(!res.ok){
+          toast.error("Registration failed! Please try again.")
+          setIsLoading(false)
+          return
+        }
+        
+        router.push('/auth/login')
+        setIsLoading(false)
+        toast.success("register successful!.")
 
     }catch(error){
       console.log("Error during register: ")
@@ -54,9 +66,9 @@ export default function Register() {
         <h1 className='w-full text-center text-[30px] font-semibold mt-2 mb-8'>Register</h1>
         <input type="text" value={firstName} onChange={(e)=>{setFirstName(e.target.value)}} placeholder='Your first name' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
         <input type="text" value={lastName} onChange={(e)=>{setLastName(e.target.value)}} placeholder='Your last name' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
-        <input type="text" value={email} onChange={(e)=>{setEmail(e.target.value)}} placeholder='Your email' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
-        <input type="text"  value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder='your password' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
-        <input type="text"  value={confirmPassword} onChange={(e)=>{setConfirmPassword(e.target.value)}} placeholder='confirm your password' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-8' />
+        <input type="email" value={email} onChange={(e)=>{setEmail(e.target.value)}} placeholder='Your email' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
+        <input type="password"  value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder='your password' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
+        <input type="password"  value={confirmPassword} onChange={(e)=>{setConfirmPassword(e.target.value)}} placeholder='confirm your password' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-8' />
         <button onClick={register} disabled={isLoading} className='w-[90%] h-9 border rounded-lg  bg-accent text-white font-semibold cursor-pointer hover:bg-accent/90'>Register</button>
         <p className='w-[90%] text-right text-[13px]'>Already have an account? <Link href='/auth/login' className='italic text-accent lg:text-secondary hover:text-accent mr-1'>Login here</Link></p>
       </div>}

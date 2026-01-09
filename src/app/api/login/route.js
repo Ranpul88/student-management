@@ -2,8 +2,11 @@ import User from "@/models/User"
 import bcrypt from "bcrypt"
 import { NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
+import { connectDB } from "@/lib/mongoDB"
 
-export async function login(req){
+export async function POST(req){
+    connectDB()
+    
     const { email, password } = await req.json()
 
     try {
@@ -15,20 +18,26 @@ export async function login(req){
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password)
 
-        if(isPasswordCorrect){
-            const payload = {
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                role: user.role,
-                isEmailVerified: user.isEmailVerified
-            }
-
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "150h" })
+        if(!isPasswordCorrect){
+            return NextResponse.json({ message: "Incorrect password" }, { status: 401 })
+        }
+        
+        const payload = {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            isEmailVerified: user.isEmailVerified
         }
 
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "150h" })
+        
+
         const response = NextResponse.json(
-            { message: "User logged in successfully" },
+            {
+                message: "User logged in successfully",
+                role: user.role
+            },
             { status: 200 }
         )
 
@@ -40,9 +49,7 @@ export async function login(req){
 
     }catch(error){
         return NextResponse.json(
-            { message: "Error logging in",
-                role: User.role
-             },
+            { message: "Error logging in" },
             { status: 500 }
         )
     }
