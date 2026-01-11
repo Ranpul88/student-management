@@ -49,7 +49,7 @@ export async function POST(req){
 
     }catch(error){
         return NextResponse.json(
-            { message: "Error logging in" },
+            { message: "Error logging in", error: error.message },
             { status: 500 }
         )
     }
