@@ -33,13 +33,13 @@ export default function Login() {
           return
         }
 
-      // const data = await res.json()
+      const data = await res.json()
 
-      // if(res.data.role == "admin"){
-      //   router.push('/admin')
-      // }else{
-      //   window.location.href = "/"
-      // }
+      if(res.data.role == "admin"){
+        router.push('/admin')
+      }else{
+        router.push('/')
+      }
       router.push('/')
       setIsLoading(false)
       toast.success("Login successful!.")

@@ -1,11 +1,13 @@
-export function proxy(req) {
-    const { pahtname } = req.nextUrl
+import { NextResponse } from "next/server"
 
-    if(pahtname.startsWith('/admin')){
-        const token = req.cookies.get('token').value
+export default function proxy(req) {
+    const { pathname } = req.nextUrl
+
+    if(pathname.startsWith('/admin')){
+        const token = req.cookies.get('token')?.value
 
         if(!token){
-            return NextResponse.redirect(new URL('/login', req.url))
+            return NextResponse.redirect(new URL('/auth/login', req.url))
         }
     }
 
