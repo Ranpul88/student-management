@@ -35,15 +35,15 @@ export default function Login() {
 
       const data = await res.json()
 
-      if(res.data.role == "admin"){
-        router.push('/admin')
+      if(data.role == "admin"){
+        router.push('/admin/students')
+        setIsLoading(false)
+        toast.success("Login successful!.")
       }else{
         router.push('/')
+        setIsLoading(false)
+        toast.success("Login successful!.")
       }
-      router.push('/')
-      setIsLoading(false)
-      toast.success("Login successful!.")
-
     }catch(error){
       console.log("Error during login: ")
       console.log(error)
