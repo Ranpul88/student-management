@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 import { NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { connectDB } from "@/lib/mongoDB"
-import Users from "@/models/User"
+import User from "@/models/User"
 
 export async function POST(req){
     connectDB()
@@ -10,7 +10,7 @@ export async function POST(req){
     const { email, password } = await req.json()
 
     try {
-        const user = await Users.findOne({ email: email })
+        const user = await User.findOne({ email: email })
 
         if(!user){
             return NextResponse.json({ message: "User not found" }, { status: 404 })
