@@ -54,6 +54,10 @@ const courseSchema = new mongoose.Schema({
             type: Number,
             required: true,
         }
+    },
+    availability: {
+        type: Boolean,
+        required: true,
     }
 })
 
