@@ -129,7 +129,7 @@ export default function AdminStudentPage() {
           )}
         </div>
       </div>
-      <Link href="/" className="w-17 h-17 bg-accent fixed bottom-8 right-12 rounded-full text-white text-5xl text-center items-center justify-center flex hover:bg-accent/80 cursor-pointer pb-2">+</Link>
+      <Link href="/admin/add-course" className="w-17 h-17 bg-accent fixed bottom-8 right-12 rounded-full text-white text-5xl text-center items-center justify-center flex hover:bg-accent/80 cursor-pointer pb-2">+</Link>
     </div>
   )
 }
