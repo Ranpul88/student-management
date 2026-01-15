@@ -30,10 +30,6 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    programOverView: {
-        type: [String],
-        required: true,
-    },
     entryRequirements: {
         type: [String],
         required: true,
@@ -48,12 +44,14 @@ const courseSchema = new mongoose.Schema({
         },
         month: {
             type: String,
-            required: true,
         },
         year: {
             type: Number,
-            required: true,
         }
+    },
+    courseContents: {
+        type: [String],
+        // required: true,
     },
     availability: {
         type: Boolean,
