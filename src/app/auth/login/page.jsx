@@ -57,7 +57,7 @@ export default function Login() {
       {isLoading ? <Loader /> : <div className='w-82 h-100 border-3 rounded-3xl p-4 flex flex-col items-center'>
         <h1 className='w-full text-center text-[30px] font-semibold mt-2 mb-10'>Login</h1>
         <input type="text" value={email} onChange={(e)=>{setEmail(e.target.value)}} placeholder='Enter email here...' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0 mb-2' />
-        <input type="text"  value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder='Enter password here...' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0' />
+        <input type="password"  value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder='Enter password here...' className='w-[90%] p-1.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-0' />
         <p className='w-[90%] text-right text-[13px] mb-8 mr-1'>Forgot password? <Link href='/forgot-password' className='italic lg:text-secondary text-accent hover:text-accent'>Reset here</Link></p>
         <button onClick={login} disabled={isLoading} className='w-[90%] h-9 border rounded-lg mb-2 bg-accent text-white font-semibold cursor-pointer hover:bg-accent/90'>Login</button>
         <button className='w-[90%] h-9 flex items-center justify-center gap-1 border rounded-lg bg-accent text-white font-semibold cursor-pointer hover:bg-accent/90'>Login with <FaGoogle /></button>
