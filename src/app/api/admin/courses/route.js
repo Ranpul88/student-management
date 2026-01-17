@@ -1,8 +1,6 @@
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoDB";
 import Course from "@/models/Course";
-import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(req){
     connectDB()
