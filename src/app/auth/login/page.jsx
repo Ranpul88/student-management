@@ -37,12 +37,12 @@ export default function Login() {
 
       if(data.role == "admin"){
         router.push('/admin/students')
-        setIsLoading(false)
         toast.success("Login successful!.")
+        setIsLoading(false)
       }else{
         router.push('/')
-        setIsLoading(false)
         toast.success("Login successful!.")
+        setIsLoading(false)
       }
     }catch(error){
       console.log("Error during login: ")

@@ -36,15 +36,6 @@ export async function GET(req){
     connectDB()
 
     try {
-        const session = await getServerSession(authOptions)
-
-        if(!session || session.user.role !== "admin"){
-            return NextResponse.json(
-                { message: "Unauthorized" },
-                { status: 401 }
-            )
-        }
-
         const courses = await Course.find({})
         return NextResponse.json(courses, { status: 200 })
     }catch(error){

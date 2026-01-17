@@ -3,25 +3,36 @@
 import Loader from "@/app/components/loader";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminStudentPage() { 
   
-  const [lecturers, setLecturers] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/lecturers', {
+    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/courses', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      credentials: 'include'
     })
-    .then(res => res.json())
+    .then(res =>{
+      if(!res.ok){
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
     .then((data)=>{
-      setLecturers(data)
+      setCourses(data)
       setIsLoading(false)
     })
-    .catch(err => console.log(err))
+    .catch(err=>{
+      console.log(err)
+      toast.error('Failed to fetch courses')
+      setIsLoading(false)
+    })
   }, [])
 
   return (
@@ -44,7 +55,7 @@ export default function AdminStudentPage() {
                 <div className="flex items-center justify-between text-white">
                   <div>
                     <p className="text-sm font-medium opacity-90">Total Courses</p>
-                    <p className="text-2xl font-bold">{lecturers.length}</p>
+                    <p className="text-2xl font-bold">{courses.length}</p>
                   </div>
                   <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,32 +94,38 @@ export default function AdminStudentPage() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {lecturers.map((lecturer) => (
+                    {courses.map((course, index) => (
                       <tr 
-                        key={lecturer.userID}
+                        key={index}
                         className="hover:bg-blue-50 transition-colors duration-150 ease-in-out"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="ml-3">
-                              <p className="text-sm font-medium text-secondary">{lecturer.userID}</p>
+                              <p className="text-sm font-medium text-secondary">{course.courseName}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{lecturer.email}</div>
+                          <div className="text-sm text-gray-900">{course.department}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{lecturer.firstName}</div>
+                          <div className="text-sm font-medium text-gray-900">{course.duration}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{lecturer.lastName}</div>
+                          <div className="text-sm font-medium text-gray-900">{course.mode}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{course.delivery}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{course.intakes}</div>
+                        </td>
+                        {/* <td className="px-6 py-4 whitespace-nowrap">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-accent">
                             {lecturer.coursesTeaching || 0} Courses
                           </span>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>
@@ -116,7 +133,7 @@ export default function AdminStudentPage() {
               </div>
 
               {/* Empty State */}
-              {lecturers.length === 0 && (
+              {courses.length === 0 && (
                 <div className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
