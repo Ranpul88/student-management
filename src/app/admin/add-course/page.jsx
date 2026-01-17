@@ -30,6 +30,10 @@ export default function addCourse() {
     
     setIsLoading(true)
 
+    const modeInArray = mode.split(',')
+    const deliveryInArray = delivery.split(',')
+    const intakesInArray = intakes.split(',')
+
     const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/courses', {
       method: 'POST',
       headers: {
@@ -40,11 +44,11 @@ export default function addCourse() {
         type: type,
         department: department,
         duration: duration,
-        mode: mode,
-        delivery: delivery,
+        mode: modeInArray,
+        delivery: deliveryInArray,
         description: description,
         entryRequirements: entryRequirements,
-        intakes: intakes,
+        intakes: intakesInArray,
         availability: availability
       })
     });

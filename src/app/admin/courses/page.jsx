@@ -73,22 +73,23 @@ export default function AdminStudentPage() {
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Course Name
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Type
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      
+                      <th className="px-5 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Department
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      <th className="px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Duration
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      <th className="px-4 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Mode
+                      </th>
+                      <th className="px-4 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Delivery
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      <th className="px-4 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Intakes
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      <th className="px-4 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -99,33 +100,38 @@ export default function AdminStudentPage() {
                         key={index}
                         className="hover:bg-blue-50 transition-colors duration-150 ease-in-out"
                       >
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="ml-3">
+                            <div>
                               <p className="text-sm font-medium text-secondary">{course.courseName}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{course.department}</div>
+                          <div className="text-sm text-center font-medium text-gray-900">{course.department}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{course.duration}</div>
+                          <div className="text-sm text-center font-medium text-gray-900">{course.duration}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{course.mode}</div>
+                          <div className="text-sm text-center font-medium text-gray-900">{course.delivery.join('/')}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{course.delivery}</div>
+                          <div className="text-sm text-center font-medium text-gray-900">{course.mode.join('/')}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{course.intakes}</div>
+                          <div className="text-sm text-center font-medium text-gray-900">{course.intakes.join('/')}</div>
                         </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-accent">
-                            {lecturer.coursesTeaching || 0} Courses
-                          </span>
-                        </td> */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-white flex justify-center gap-2">
+                            <Link href='/' className="px-2 py-1 rounded-md bg-accent hover:bg-accent/80">
+                              Edit
+                            </Link>
+                            <button className="border px-2 py-1 bg-red-600 rounded-md hover:bg-red-500 cursor-pointer">
+                              Block
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
