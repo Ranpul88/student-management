@@ -6,15 +6,15 @@ export default function proxy(req) {
 
     if(pathname.startsWith('/admin')){
         const token = req.cookies.get('token')?.value
+        
+        if(!token){
+            return NextResponse.redirect(new URL('/auth/login?error=login_required', req.url))
+        }
+        
         const user = jwt.verify(token, process.env.JWT_SECRET)
 
-        if(!token && user.role !== 'admin'){
-            return NextResponse.redirect(new URL('/auth/login?error:', req.url))
-        }
-
-
         if(user.role !== 'admin'){
-            return NextResponse.redirect(new URL('/auth/login', req.url))
+            return NextResponse.redirect(new URL('/?error=unauthorized', req.url))
         }
     }
 
