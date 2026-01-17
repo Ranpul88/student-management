@@ -2,8 +2,8 @@
 
 import Loader from '@/app/components/loader';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaGoogle } from "react-icons/fa";
 
@@ -12,6 +12,15 @@ export default function Login() {
   const[password, setPassword] = useState('')
   const[isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error')
+
+  useEffect(() => {
+    if(error === 'login_required'){
+      toast.error("You must be logged in to access that page.")
+    }
+  }, [error])
 
   async function login(){
     setIsLoading(true)
@@ -38,12 +47,13 @@ export default function Login() {
       if(data.role == "admin"){
         router.push('/admin/students')
         toast.success("Login successful!.")
-        setIsLoading(false)
       }else{
         router.push('/')
         toast.success("Login successful!.")
-        setIsLoading(false)
       }
+      
+      setIsLoading(false)
+
     }catch(error){
       console.log("Error during login: ")
       console.log(error)
