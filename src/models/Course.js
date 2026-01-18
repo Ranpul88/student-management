@@ -34,6 +34,10 @@ const courseSchema = new mongoose.Schema({
         type: [String],
         required: true,
     },
+    hallNo: {
+        type: String,
+        required: true,
+    },
     intakes: {
         type: [String],
         required: true,

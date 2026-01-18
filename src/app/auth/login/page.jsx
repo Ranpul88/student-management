@@ -45,7 +45,7 @@ export default function Login() {
       const data = await res.json()
 
       if(data.role == "admin"){
-        router.push('/admin/students')
+        router.push('/admin')
         toast.success("Login successful!.")
       }else{
         router.push('/')

@@ -24,7 +24,7 @@ export default function AdminStudentPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-primary via-white to-blue-50 p-8">
+    <div className="h-full bg-linear-to-br from-primary via-white to-blue-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
