@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function addCourse() {
+export default function AddCourse() {
 
   const [courseName, setCourseName] = useState('');
   const [type, setType] = useState('');

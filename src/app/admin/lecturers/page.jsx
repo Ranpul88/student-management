@@ -3,7 +3,7 @@
 import Loader from "@/app/components/loader";
 import { useEffect, useState } from "react";
 
-export default function AdminStudentPage() { 
+export default function AdminLecturersPage() { 
   
   const [lecturers, setLecturers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +24,7 @@ export default function AdminStudentPage() {
   }, [])
 
   return (
-    <div className="h-full bg-linear-to-br from-primary via-white to-blue-50 p-8">
+    <div className="h-full bg-linear-to-br from-primary via-white to-blue-50 pt-2 px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
