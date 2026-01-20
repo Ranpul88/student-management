@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongoDB";
 import Course from "@/models/Course";
 
 export async function POST(req){
-    connectDB()
+    await connectDB()
 
     try {
         const data = await req.json()
@@ -31,7 +31,7 @@ export async function POST(req){
 }
 
 export async function GET(req){
-    connectDB()
+    await connectDB()
 
     try {
         const courses = await Course.find({})

@@ -2,15 +2,17 @@
 
 import ModernCalendar from "@/app/components/calendar";
 import Loader from "@/app/components/loader";
+import { se } from "date-fns/locale";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function TimeTable() { 
   
-  const [lecturers, setLecturers] = useState([]);
+  const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/lecturers', {
+    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/events', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -18,15 +20,16 @@ export default function TimeTable() {
     })
     .then(res => res.json())
     .then((data)=>{
-      setLecturers(data)
+      console.log(data)
+      setEvents(data)
       setIsLoading(false)
     })
     .catch(err => console.log(err))
-  }, [])
+  }, [isLoading])
 
   return (
     <div className="h-full bg-linear-to-br from-primary via-white to-blue-50 pt-2 px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto pb-6">
         {/* Header Section */}
         <div className="mb-4">
           <h1 className="text-4xl font-bold text-secondary mb-2">Time Table</h1>
@@ -34,7 +37,7 @@ export default function TimeTable() {
         </div>
 
         <div className="w-full flex items-center justify-center py-6">
-            <ModernCalendar />
+            <ModernCalendar reload={()=>{setIsLoading(true)}} />
         </div>
 
         {/* Content Card */}
@@ -47,7 +50,7 @@ export default function TimeTable() {
               <div className="bg-linear-to-r from-accent to-blue-600 px-6 py-4">
                 <div className="flex items-center justify-between text-white">
                   <div>
-                    <p className="text-sm font-medium opacity-90">Time Table</p>
+                    <p className="text-sm font-medium opacity-90">Today's Time Table</p>
                   </div>
                   <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,53 +66,57 @@ export default function TimeTable() {
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-200">
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        User ID
+                        Date
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Email
+                        Time
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        First Name
+                        Title
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Last Name
+                        Location
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Courses
+                        Description
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Action
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {lecturers.map((lecturer) => (
+                    {events.map((event, index) => (
                       <tr 
-                        key={lecturer.userID}
+                        key={index}
                         className="hover:bg-blue-50 transition-colors duration-150 ease-in-out"
                       >
+                        <td className="px-5 py-4 whitespace-nowrap">
+                            <div className="">
+                              <p className="text-sm font-medium text-secondary">{event.date}</p>
+                            </div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="shrink-0 h-10 w-10 bg-linear-to-br from-accent to-blue-600 rounded-full flex items-center justify-center">
-                              <span className="text-white font-semibold text-sm">
-                                {lecturer.firstName?.charAt(0)}{lecturer.lastName?.charAt(0)}
-                              </span>
-                            </div>
-                            <div className="ml-3">
-                              <p className="text-sm font-medium text-secondary">{lecturer.userID}</p>
-                            </div>
+                          <div className="text-sm text-gray-900">{event.time}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{event.eventTitle}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{event.location}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{event.description}</div>
+                        </td>
+                        <td className="py-4 whitespace-nowrap">
+                          <div className="text-sm text-white flex gap-2">
+                            <Link href='/' className="px-2 py-1 rounded-md bg-accent hover:bg-accent/80">
+                              Edit
+                            </Link>
+                            <button className="border px-2 py-1 bg-red-600 rounded-md hover:bg-red-500 cursor-pointer">
+                              Delete
+                            </button>
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{lecturer.email}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{lecturer.firstName}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{lecturer.lastName}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-accent">
-                            {lecturer.coursesTeaching || 0} Courses
-                          </span>
                         </td>
                       </tr>
                     ))}
@@ -118,13 +125,13 @@ export default function TimeTable() {
               </div>
 
               {/* Empty State */}
-              {lecturers.length === 0 && (
+              {events.length === 0 && (
                 <div className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No lecturers found</h3>
-                  <p className="mt-1 text-sm text-gray-500">Get started by adding a new lecturer.</p>
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">No events found</h3>
+                  <p className="mt-1 text-sm text-gray-500">Get started by adding a new event.</p>
                 </div>
               )}
             </>

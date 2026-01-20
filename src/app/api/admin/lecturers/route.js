@@ -3,7 +3,7 @@ import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET(req){
-    connectDB()
+    await connectDB()
 
     try {
         const lecturers = await User.find({ role: "lecturer" })
