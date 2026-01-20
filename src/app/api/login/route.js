@@ -5,7 +5,7 @@ import { connectDB } from "@/lib/mongoDB"
 import User from "@/models/User"
 
 export async function POST(req){
-    connectDB()
+    await connectDB()
     
     const { email, password } = await req.json()
 

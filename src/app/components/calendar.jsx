@@ -3,8 +3,9 @@ import { Calendar, Clock, MapPin, FileText } from 'lucide-react';
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { se } from 'date-fns/locale';
 
-export default function ModernCalendar() {
+export default function ModernCalendar(props) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -51,7 +52,7 @@ export default function ModernCalendar() {
   };
 
   async function handleSubmit(){
-    const dateKey = selectedDate.toISOString().split('T')[0];
+    const dateKey = selectedDate.toLocaleDateString('en-CA').split('T')[0];
 
     if(title.trim() === '' || time.trim() === '' || location.trim() === '') {
       toast.error("Please fill in all required fields (Title, Time, Location).");
@@ -83,6 +84,7 @@ export default function ModernCalendar() {
     setDescription('')
     setShowModal(false);
     toast.success("Event saved successfully!");
+    props.reload();
 
   };
 
