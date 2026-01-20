@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/mongoDB"
 import Course from "@/models/Course"
 
 export async function GET(req){
-    connectDB()
+    await connectDB()
 
     try {
         const courses = await Course.find({ availability: true })
