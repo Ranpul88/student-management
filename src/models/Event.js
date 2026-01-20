@@ -1,8 +1,11 @@
-import TimeTable from "@/app/admin/time-table/page";
 import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema({
     eventTitle: {
+        type: String,
+        required: true
+    },
+    date: {
         type: String,
         required: true
     },
@@ -19,6 +22,6 @@ const eventSchema = new mongoose.Schema({
     }
 })
 
-const Event = mongoose.model('event', eventSchema)
+const Event = mongoose.models.Event || mongoose.model('Event', eventSchema)
 
 export default Event
