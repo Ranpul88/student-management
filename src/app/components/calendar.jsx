@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, FileText } from 'lucide-react';
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 export default function ModernCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [events, setEvents] = useState({});
-  const [formData, setFormData] = useState({
-    title: '',
-    time: '',
-    location: '',
-    description: ''
-  });
+  // const [events, setEvents] = useState({});
+  const [title, setTitle] = useState('');
+  const [time, setTime] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
@@ -42,33 +41,57 @@ export default function ModernCalendar() {
     setSelectedDate(clickedDate);
     
     const dateKey = clickedDate.toISOString().split('T')[0];
-    if (events[dateKey]) {
-      setFormData(events[dateKey]);
-    } else {
-      setFormData({ title: '', time: '', location: '', description: '' });
-    }
+    // if (events[dateKey]) {
+    //   setFormData(events[dateKey]);
+    // } else {
+    //   setFormData({ title: '', time: '', location: '', description: '' });
+    // }
     
     setShowModal(true);
   };
 
-  const handleSubmit = () => {
-    // const dateKey = selectedDate.toISOString().split('T')[0];
+  async function handleSubmit(){
+    const dateKey = selectedDate.toISOString().split('T')[0];
+
+    if(title.trim() === '' || time.trim() === '' || location.trim() === '') {
+      toast.error("Please fill in all required fields (Title, Time, Location).");
+      return;
+    }
+
+    const res = await fetch( process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        date: dateKey,
+        eventTitle: title,
+        time: time,
+        location: location,
+        description: description
+      })
+    });
+
+    if(!res.ok) {
+      toast.error("Error saving event. Please try again.");
+      return;
+    }
     
-    // if (formData.title || formData.time || formData.location || formData.description) {
-    //   setEvents({ ...events, [dateKey]: formData });
-    // } else {
-    //   const newEvents = { ...events };
-    //   delete newEvents[dateKey];
-    //   setEvents(newEvents);
-    // }
-    
-    // setShowModal(false);
-    // setFormData({ title: '', time: '', location: '', description: '' });
+    setTitle('')
+    setTime('')
+    setLocation('')
+    setDescription('')
+    setShowModal(false);
+    toast.success("Event saved successfully!");
+
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setFormData({ title: '', time: '', location: '', description: '' });
+    setTitle('')
+    setTime('')
+    setLocation('')
+    setDescription('')
   };
 
   const isToday = (day) => {
@@ -78,11 +101,11 @@ export default function ModernCalendar() {
            currentDate.getFullYear() === today.getFullYear();
   };
 
-  const hasEvent = (day) => {
-    const dateKey = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-      .toISOString().split('T')[0];
-    return events[dateKey] && (events[dateKey].title || events[dateKey].time);
-  };
+  // const hasEvent = (day) => {
+  //   const dateKey = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+  //     .toISOString().split('T')[0];
+  //   return events[dateKey] && (events[dateKey].title || events[dateKey].time);
+  // };
 
   return (
     <div className="h-full bg-primary pb-4">
@@ -134,7 +157,7 @@ export default function ModernCalendar() {
               {[...Array(daysInMonth)].map((_, i) => {
                 const day = i + 1;
                 const isTodayDate = isToday(day);
-                const hasEventDate = hasEvent(day);
+                // const hasEventDate = hasEvent(day);
                 
                 return (
                   <button
@@ -142,16 +165,16 @@ export default function ModernCalendar() {
                     onClick={() => handleDateClick(day)}
                     className={`aspect-square rounded-xl text-sm flex flex-col items-center justify-center relative transition-all duration-100 hover:border
                       ${isTodayDate 
-                        ? 'bg-linear-to-br from-accent to-[#0096db] text-white shadow-lg' 
-                        : hasEventDate
-                        ? 'bg-accent/10 text-secondary border border-accent/30'
-                        : 'bg-primary text-secondary hover:bg-accent/5'
+                        && 'bg-linear-to-br from-accent to-[#0096db] text-white shadow-lg' 
+                        // : hasEventDate
+                        // ? 'bg-accent/10 text-secondary border border-accent/30'
+                        // : 'bg-primary text-secondary hover:bg-accent/5'
                       }`}
                   >
                     <span className="font-semibold">{day}</span>
-                    {hasEventDate && (
+                    {/* {hasEventDate && (
                       <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${isTodayDate ? 'bg-white' : 'bg-accent'}`} />
-                    )}
+                    )} */}
                   </button>
                 );
               })}
@@ -171,7 +194,6 @@ export default function ModernCalendar() {
                   aria-label="Close modal"
                 >
                   <IoMdClose className="w-5 h-5  text-white" />
-                  {/* <X className="w-5 h-5 text-white" /> */}
                 </button>
                 <h3 className="text-2xl font-bold text-white flex items-center gap-2">
                   <Calendar className="w-6 h-6" />
@@ -193,8 +215,8 @@ export default function ModernCalendar() {
                   </label>
                   <input
                     type="text"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter event name"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-accent focus:outline-none transition-all duration-200 text-secondary"
                   />
@@ -208,8 +230,8 @@ export default function ModernCalendar() {
                   </label>
                   <input
                     type="time"
-                    value={formData.time}
-                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-accent focus:outline-none transition-all duration-200 text-secondary"
                   />
                 </div>
@@ -222,8 +244,8 @@ export default function ModernCalendar() {
                   </label>
                   <input
                     type="text"
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                     placeholder="Where will it be held?"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-accent focus:outline-none transition-all duration-200 text-seconary"
                   />
@@ -236,8 +258,8 @@ export default function ModernCalendar() {
                     Description
                   </label>
                   <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     placeholder="Add event details..."
                     rows="3"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-accent focus:outline-none transition-all duration-200 resize-none text-secondary"
