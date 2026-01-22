@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, FileText } from 'lucide-react';
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import toast from 'react-hot-toast';
-import { se } from 'date-fns/locale';
 
 export default function ModernCalendar(props) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  // const [events, setEvents] = useState({});
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
@@ -40,14 +38,6 @@ export default function ModernCalendar(props) {
   const handleDateClick = (day) => {
     const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     setSelectedDate(clickedDate);
-    
-    const dateKey = clickedDate.toISOString().split('T')[0];
-    // if (events[dateKey]) {
-    //   setFormData(events[dateKey]);
-    // } else {
-    //   setFormData({ title: '', time: '', location: '', description: '' });
-    // }
-    
     setShowModal(true);
   };
 
@@ -103,12 +93,6 @@ export default function ModernCalendar(props) {
            currentDate.getFullYear() === today.getFullYear();
   };
 
-  // const hasEvent = (day) => {
-  //   const dateKey = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-  //     .toISOString().split('T')[0];
-  //   return events[dateKey] && (events[dateKey].title || events[dateKey].time);
-  // };
-
   return (
     <div className="h-full bg-primary pb-4">
       <div className="w-75 h-full mx-auto">
@@ -159,24 +143,23 @@ export default function ModernCalendar(props) {
               {[...Array(daysInMonth)].map((_, i) => {
                 const day = i + 1;
                 const isTodayDate = isToday(day);
-                // const hasEventDate = hasEvent(day);
                 
                 return (
                   <button
                     key={day}
+                    disabled={day < new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear()}
                     onClick={() => handleDateClick(day)}
                     className={`aspect-square rounded-xl text-sm flex flex-col items-center justify-center relative transition-all duration-100 hover:border
                       ${isTodayDate 
-                        && 'bg-linear-to-br from-accent to-[#0096db] text-white shadow-lg' 
-                        // : hasEventDate
-                        // ? 'bg-accent/10 text-secondary border border-accent/30'
-                        // : 'bg-primary text-secondary hover:bg-accent/5'
+                        && 'bg-linear-to-br from-accent to-[#0096db] text-white shadow-lg'
                       }`}
                   >
                     <span className="font-semibold">{day}</span>
-                    {/* {hasEventDate && (
-                      <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${isTodayDate ? 'bg-white' : 'bg-accent'}`} />
-                    )} */}
+                    {
+                      props.events.some(event => event.date.split('-')[2] == day) && (
+                        <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${isTodayDate ? 'bg-white' : 'bg-accent'}`} />
+                      )
+                    } 
                   </button>
                 );
               })}

@@ -9,7 +9,7 @@ export default function AdminLecturersPage() {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/lecturers', {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/lecturers', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

@@ -2,7 +2,6 @@
 
 import ModernCalendar from "@/app/components/calendar";
 import Loader from "@/app/components/loader";
-import { se } from "date-fns/locale";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -20,7 +19,6 @@ export default function TimeTable() {
     })
     .then(res => res.json())
     .then((data)=>{
-      console.log(data)
       setEvents(data)
       setIsLoading(false)
     })
@@ -37,7 +35,7 @@ export default function TimeTable() {
         </div>
 
         <div className="w-full flex items-center justify-center py-6">
-            <ModernCalendar reload={()=>{setIsLoading(true)}} />
+            <ModernCalendar events={events} reload={()=>{setIsLoading(true)}} />
         </div>
 
         {/* Content Card */}
