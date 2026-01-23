@@ -9,10 +9,10 @@ export async function POST(req){
 
         let eventID = "EVT0001"
 
-        const lastEvent = await Event.findOne({}).sort({ createdAt: -1 })
+        const lastEvent = await Event.findOne().sort({ createdAt: -1 })
 
         if(lastEvent!=null){
-            const lastEventIDNumber = (parseInt(lastEvent.eventId.replace("EVT", "")))
+            const lastEventIDNumber = (parseInt(lastEvent.eventID.replace("EVT", "")))
             const newEventID = "EVT" + (lastEventIDNumber + 1).toString().padStart(4, "0")
             eventID = newEventID
         }
@@ -20,8 +20,8 @@ export async function POST(req){
         const data = await req.json()
     
         const event = new Event({
-            eventId: eventID,
-            title: data.title,
+            eventID: eventID,
+            eventTitle: data.eventTitle,
             description: data.description,
             date: data.date,
             time: data.time,
@@ -62,8 +62,9 @@ export async function DELETE(req){
 
     try {
         const data = await req.json()
-        await Event.deleteOne({ eventId: data.eventID })
+        await Event.deleteOne({ eventID: data.eventID })
         return NextResponse.json( { message: "Event deleted successfully" }, { status: 200 } )
+
     }catch(error){
         return NextResponse.json(
             { message: "Error deleting event", error: error.message },
