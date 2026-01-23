@@ -6,9 +6,27 @@ export async function POST(req){
     await connectDB()
 
     try {
+
+        let eventID = "EVT0001"
+
+        const lastEvent = await Event.findOne({}).sort({ createdAt: -1 })
+
+        if(lastEvent!=null){
+            const lastEventIDNumber = (parseInt(lastEvent.eventId.replace("EVT", "")))
+            const newEventID = "EVT" + (lastEventIDNumber + 1).toString().padStart(4, "0")
+            eventID = newEventID
+        }
+
         const data = await req.json()
     
-        const event = new Event(data)
+        const event = new Event({
+            eventId: eventID,
+            title: data.title,
+            description: data.description,
+            date: data.date,
+            time: data.time,
+            location: data.location
+        })
         await event.save()
         return NextResponse.json(
             { message: "event saved successfully" },
