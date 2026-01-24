@@ -72,3 +72,19 @@ export async function DELETE(req){
         )
     }
 }
+
+export async function PUT(req){
+    await connectDB()
+
+    try {
+        const data = await req.json()
+        await Event.updateOne({ eventID: data.eventID }, { $set: { eventTitle: data.eventTitle, description: data.description, date: data.date, time: data.time, location: data.location } })
+        return NextResponse.json( { message: "Event updated successfully" }, { status: 200 } )
+
+    }catch(error){
+        return NextResponse.json(
+            { message: "Error updating event", error: error.message },
+            { status: 500 }
+        )
+    }
+}
