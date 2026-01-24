@@ -43,3 +43,16 @@ export async function GET(req){
         )
     }
 }
+
+export async function PUT(req){
+    await connectDB()
+
+    try {
+        const data = await req.json()
+
+        await Course.updateOne({ courseID: data.courseName }, { $set: {  description: data.description, mode: data.mode, delivery: data.delivery, entryRequirements: data.entryRequirements, intakes: data.intakes, availability: data.availability} })
+        return NextResponse.json( { message: "Course updated successfully" }, { status: 200 } )
+    } catch (error) {
+        
+    }
+}
