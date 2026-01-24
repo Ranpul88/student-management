@@ -1,5 +1,6 @@
 import { Calendar, Clock, FileText, MapPin } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
 
 export default function EventEditButton(props) {
@@ -10,6 +11,32 @@ export default function EventEditButton(props) {
     const [location, setLocation] = useState(props.event.location);
     const [description, setDescription] = useState(props.event.description);
     const [disable, setDisable] = useState(true);
+
+    async function updateEvent() {
+
+        if(title.trim() === '' || time.trim() === '' || location.trim() === '') {
+            toast.error("Please fill in all required fields (Title, Time, Location).");
+            return;
+        }
+
+        setDisable(true);
+
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/events', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ eventID: props.event.eventID, eventTitle: title, description: description, date: props.event.date, time: time, location: location })
+        })
+        
+        if(!res.ok){
+            toast.error("Error updating event. Please try again.")
+            return
+        }
+ 
+        toast.success("Event updated successfully!")
+        props.reload()
+    }
 
   return (
     <>
@@ -95,6 +122,7 @@ export default function EventEditButton(props) {
                 <button
                 // onClick={handleSubmit}
                 disabled={disable}
+                onClick={updateEvent}
                 className={`flex-1 px-6 py-3 rounded-xl text-white font-semibold  ${disable ? 'bg-accent/80 hover:cursor-not-allowed' : 'bg-linear-to-r from-accent to-[#0096db] hover:shadow-lg hover:scale-105 transition-all duration-200'}`}
                 >
                 Update changes
