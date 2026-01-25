@@ -1,6 +1,7 @@
 'use client'
 
 import Loader from "@/app/components/loader";
+import { is } from "date-fns/locale";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -11,7 +12,7 @@ export default function AdminStudentPage() {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    const res = fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/courses', {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/courses', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -124,7 +125,20 @@ export default function AdminStudentPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-white flex justify-center gap-2">
-                            <Link href='/' className="px-2 py-1 rounded-md bg-accent hover:bg-accent/80">
+                            <Link href={{pathname:"/admin/courses/update-course",
+                              query: {
+                                courseName: course.courseName,
+                                type: course.type,
+                                department: course.department,
+                                duration: course.duration,
+                                mode: course.mode.join(','),
+                                delivery: course.delivery.join(','),
+                                description: course.description,
+                                entryRequirements: course.entryRequirements,
+                                intakes: course.intakes.join(','),
+                                availability: course.availability,
+                              }}}
+                              className="px-2 py-1 rounded-md bg-accent hover:bg-accent/80">
                               Edit
                             </Link>
                             <button className="border px-2 py-1 bg-red-600 rounded-md hover:bg-red-500 cursor-pointer">
