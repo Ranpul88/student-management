@@ -1,4 +1,6 @@
 import { connectDB } from "@/lib/mongoDB"
+import Course from "@/models/Course"
+import { NextResponse } from "next/server"
 
 export async function GET(req){
     await connectDB()

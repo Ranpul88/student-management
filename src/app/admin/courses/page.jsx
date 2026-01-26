@@ -125,18 +125,8 @@ export default function AdminStudentPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-white flex justify-center gap-2">
                             <Link href={{pathname:"/admin/courses/update-course",
-                              query: {
-                                courseName: course.courseName,
-                                type: course.type,
-                                department: course.department,
-                                duration: course.duration,
-                                mode: course.mode.join(','),
-                                delivery: course.delivery.join(','),
-                                description: course.description,
-                                entryRequirements: course.entryRequirements,
-                                intakes: course.intakes.join(','),
-                                availability: course.availability,
-                              }}}
+                              query: {courseName: course.courseName}
+                            }}
                               className="px-2 py-1 rounded-md bg-accent hover:bg-accent/80">
                               Edit
                             </Link>
