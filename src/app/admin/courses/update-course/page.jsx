@@ -2,7 +2,7 @@
 
 import Loader from "@/app/components/loader";
 import {  useRouter, useSearchParams } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function UpdateCourse() {

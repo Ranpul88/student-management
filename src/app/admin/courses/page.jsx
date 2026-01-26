@@ -1,7 +1,6 @@
 'use client'
 
 import Loader from "@/app/components/loader";
-import { is } from "date-fns/locale";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
