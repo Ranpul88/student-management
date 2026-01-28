@@ -13,7 +13,7 @@ export default function UpdateCourse() {
     const [course, setCourse] = useState([]);
 
     useEffect(() => {
-        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/admin/courses/' + courseName, {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/admin/courses/${courseName}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ export default function UpdateCourse() {
     const type = course.type;
     const department = course.department;
     const [duration, setDuration] = useState(course.duration);
-    const [Mode, setMode] = useState(course.mode);
+    const [mode, setMode] = useState(course.mode);
     const [delivery, setDelivery] = useState(course.delivery);
     const [description, setDescription] = useState(course.description);
     const [entryRequirements, setEntryRequirements] = useState(course.entryRequirements);
