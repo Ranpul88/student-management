@@ -15,6 +15,7 @@ export default function AddCourse() {
   const [delivery, setDelivery] = useState('');
   const [description, setDescription] = useState('');
   const [entryRequirements, setEntryRequirements] = useState('');
+  const [hallNo, setHallNo] = useState('');
   const [intakes, setIntakes] = useState('');
   const [files, setFiles] = useState([]);
   const [availability, setAvailability] = useState(true);
@@ -23,13 +24,14 @@ export default function AddCourse() {
   const router = useRouter();
 
   async function addCourse(){
-    if(courseName.trim() == "" || department.trim() == "" || duration.trim() == "" || mode.trim() == "" || delivery.trim() == "" || description.trim() == "" || entryRequirements.trim() == "" || intakes.trim() == ""){
+    if(courseName.trim() == "" || department.trim() == "" || duration.trim() == "" || mode.trim() == "" || delivery.trim() == "" || description.trim() == "" || entryRequirements.trim() == "" || hallNo.trim() == "" || intakes.trim() == ""){
       toast.error("Please fill in all required fields.")
       return
     }
     
     setIsLoading(true)
 
+    const storeCourseName = courseName.replace(' ', '-');
     const modeInArray = mode.split(',')
     const deliveryInArray = delivery.split(',')
     const intakesInArray = intakes.split(',')
@@ -40,7 +42,7 @@ export default function AddCourse() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        courseName: courseName,
+        courseName: storeCourseName,
         type: type,
         department: department,
         duration: duration,
@@ -48,6 +50,7 @@ export default function AddCourse() {
         delivery: deliveryInArray,
         description: description,
         entryRequirements: entryRequirements,
+        hallNo: hallNo,
         intakes: intakesInArray,
         availability: availability
       })
@@ -68,6 +71,7 @@ export default function AddCourse() {
     setDelivery('')
     setDescription('')
     setEntryRequirements('')
+    setHallNo('')
     setIntakes('')
     setFiles([])
     setAvailability(true)
@@ -111,6 +115,10 @@ export default function AddCourse() {
           <div className="flex flex-col">
             <label className="mb-1 font-medium text-gray-700">Entry Requirements</label>
             <textarea type="text" value={entryRequirements} onChange={(e) => setEntryRequirements(e.target.value)} className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-1 font-medium text-gray-700">Hall No</label>
+            <input type="text" value={hallNo} onChange={(e) => setHallNo(e.target.value)} className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"></input>
           </div>
           <div className="flex flex-col">
             <label className="flex items-baseline mb-1 font-medium text-gray-700">Intakes<p className="text-sm text-gray-500">(monthes)</p></label>
